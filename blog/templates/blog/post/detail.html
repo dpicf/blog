@@ -20,7 +20,7 @@
       <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
     </p>
   {% empty %}
-    Похожих статей пока нет.
+    Похожих статей пока нет
   {% endfor %}
   {% with comments.count as total_comments %}
     <h2>
@@ -36,7 +36,7 @@
       {{ comment.body|linebreaks }}
     </div>
   {% empty %}
-    <p>Здесь пока нет комментариев.</p>
+    <p>Здесь пока нет комментариев</p>
   {% endfor %}
   {% if new_comment %}
     <h2>Комментарий добавлен.</h2>

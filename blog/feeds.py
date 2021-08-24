@@ -5,9 +5,9 @@ from .models import Post
 
 
 class LatestPostsFeed(Feed):
-    title = 'My blog'
+    title = 'Just блог'
     link = reverse_lazy('blog:post_list')
-    description = 'New posts of my blog.'
+    description = 'Новые статьи Just блога'
 
     def items(self):
         return Post.published.all()[:5]

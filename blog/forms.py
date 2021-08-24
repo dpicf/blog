@@ -3,11 +3,10 @@ from .models import Comment
 
 
 class EmailPostForm(forms.Form):
-    name = forms.CharField(max_length=25)
-    email = forms.EmailField()
-    to = forms.EmailField()
-    comments = forms.CharField(required=False,
-                               widget=forms.Textarea)
+    name = forms.CharField(max_length=25, label="Имя")
+    email = forms.EmailField(label="От кого (email)")
+    to = forms.EmailField(label="Кому (email)")
+    comments = forms.CharField(required=False, widget=forms.Textarea, label="Комментарии")
 
 
 class CommentForm(forms.ModelForm):
@@ -17,4 +16,4 @@ class CommentForm(forms.ModelForm):
 
 
 class SearchForm(forms.Form):
-    query = forms.CharField()
+    query = forms.CharField(label="Запрос")
