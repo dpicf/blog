@@ -30,7 +30,12 @@ def post_list(request, tag_slug=None):
 
 
 def post_detail(request, year, month, day, post):
-    post = get_object_or_404(Post, slug=post, status='published', publish__year=year, publish__month=month, publish__day=day)
+    post = get_object_or_404(Post,
+                             slug=post,
+                             status='published',
+                             publish__year=year,
+                             publish__month=month,
+                             publish__day=day)
 
     comments = post.comments.filter(active=True)
 
@@ -47,9 +52,14 @@ def post_detail(request, year, month, day, post):
 
     post_tags_ids = post.tags.values_list('id', flat=True)
     similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
-    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags','-publish')[:4]
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4]
 
-    return render(request, 'blog/post/detail.html', {'post': post, 'comments': comments, 'new_comment': new_comment, 'comment_form': comment_form, 'similar_posts': similar_posts})
+    return render(request, 'blog/post/detail.html',
+                  {'post': post,
+                   'comments': comments,
+                   'new_comment': new_comment,
+                   'comment_form': comment_form,
+                   'similar_posts': similar_posts})
 
 
 class PostListView(ListView):
@@ -69,7 +79,7 @@ def post_share(request, post_id):
             cd = form.cleaned_data
             post_url = request.build_absolute_uri(post.get_absolute_url())
             subject = f"{cd['name']} рекомендует прочесть {post.title}"
-            message = f"Прочти {post.title} по {post_url}\n\n"\
+            message = f"Прочти {post.title} по {post_url}\n\n" \
                       f"Комментарий от {cd['name']}:\n{cd['comments']}"
             send_mail(subject, message, 'admin@myblog.com', [cd['to']])
             sent = True
@@ -87,5 +97,6 @@ def post_search(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            results = Post.published.annotate(similarity=TrigramSimilarity('title', query)).filter(similarity__gt=0.1).order_by('-similarity')
+            results = Post.published.annotate(similarity=TrigramSimilarity('title', query)).filter(
+                similarity__gt=0.1).order_by('-similarity')
     return render(request, 'blog/post/search.html', {'form': form, 'query': query, 'results': results})
