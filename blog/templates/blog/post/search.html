@@ -8,14 +8,14 @@
     <h1>Статьи, содержащие "{{ query }}"</h1>
     <h3>
       {% with results.count as total_results %}
-          Найдены {{ total_results }} статьи{{ total_results|pluralize }}
+          {{ total_results|rupluralize:"Найдена,Найдено,Найдено" }} {{ total_results }} {{ total_results|rupluralize:"статья,статьи,статей" }}
       {% endwith %}
     </h3>
     {% for post in results %}
         <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
         {{ post.body|markdown|truncatewords_html:5 }}
     {% empty %}
-      <p>Не найдено подходящих статей, попробуйте изменить запрос.</p>
+      <p>Не найдено подходящих статей, попробуйте изменить запрос</p>
     {% endfor %}
     <p><a href="{% url 'blog:post_search' %}">Повторить поиск</a></p>
   {% else %}
